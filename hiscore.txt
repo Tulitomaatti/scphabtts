@@ -1,0 +1,8 @@
+# awesome highscore file
+
+Game 1
+======
+35284951    foo
+ 1323124    bar
+     499    lolcat
+      -3    teline

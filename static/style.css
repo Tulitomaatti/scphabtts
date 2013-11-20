@@ -1,0 +1,12 @@
+.even td {
+    background-color: lightgray;
+    margin:0;
+    padding:5px;
+    text-align: left;
+}
+.odd td {
+    background-color: white; 
+    margin:0;
+    padding:5px;
+    text-align: left;
+}

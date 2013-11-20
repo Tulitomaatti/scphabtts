@@ -1,0 +1,36 @@
+<!doctype html>
+
+<head>
+    <title> EBIN SCHPATTS! </title>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+
+{% block body %}
+<table>
+ 
+  {% for column in data %}
+    <tr class="{{ loop.cycle('odd', 'even') }}">
+        {% for row in column %}
+            <td>{{row.string}}</td>
+              {% endfor %}
+    </tr>
+
+  {% endfor %}
+
+{% endblock %}
+
+
+<style type="text/css" media="screen">
+tr.even td {
+    background-color: lightgray;
+    margin:0px;
+    padding:5px;
+    text-align: left;
+}
+tr.odd td {
+    background-color: white; 
+    margin:0px;
+    padding:5px;
+    text-align: left;
+}
+</style>
