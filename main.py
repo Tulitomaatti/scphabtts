@@ -26,6 +26,16 @@ def fuuboar():
 
     return render_template('schpatts.html', data=data)
 
+@app.route("/hiscore")
+def hiscore():
+    scores = open("hiscore.txt", "r")
+
+    # Palauta html suoraan: 
+    return scores.read()
+
+    # Anna templaten hoitaa hommat: 
+    # return render_template('template.html', templatenmuuttuja = muuttuja)
+
 if __name__ == "__main__":
     app.debug=True
     app.run(host='0.0.0.0')
