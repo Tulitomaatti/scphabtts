@@ -5,19 +5,9 @@ from flask import request
 from flask import redirect
 from flask import url_for 
 from werkzeug import secure_filename
+from hiscore import Hiscore
 
 import pickle
-
-class Hiscore():
-    def __init__(self, nick, game, score=0, scoretype=1): 
-        self.nick = nick
-        self.game = game
-        self.score = score
-        self.scoretype = scoretype
-
-    def __str__(self):
-        return self.nick + " " + self.score + " " + self.game
-        
 
 import urllib2
 from bs4 import BeautifulSoup
@@ -55,7 +45,7 @@ def addscore():
         scoretype = form['scoretype']
 
 
-        new_score = Hiscore(request.form['nick'], request.form['game'], request.form['score'], request.form['scoretype'])
+        new_score = Hiscore(nick, game, score, scoretype)
         # Assuming that hiscores.txt doesn't exist or has a hiscore or an empty list pickled
         scores = []
 
@@ -83,10 +73,16 @@ def addscore():
 
 @app.route("/hiscore")
 def hiscore():
-    scores = open("hiscore.txt", "r")
+    f = open("hiscores.txt", "r")
+    scores = pickle.load(f)
+
+    string = ""
+
+    for score in scores:
+        string += str(score)
 
     # Palauta html suoraan: 
-    return scores.read()
+    return string
 
     # Anna templaten hoitaa hommat: 
     # return render_template('template.html', templatenmuuttuja = muuttuja)
