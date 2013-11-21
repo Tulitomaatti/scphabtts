@@ -9,11 +9,21 @@ import pickle
 import urllib2
 from bs4 import BeautifulSoup
 
+import mopidy
+
 MAGIC_URL = "http://www.omatlahdot.fi/omatlahdot/web?command=embedded&action=view&c=15&o=1&s=1220182"
 MAGIC_NUMBER = 1
 SCORE_SHOW_NUMBER_MAGIC_VARIABLE = 5
 
 app = Flask(__name__)
+
+@app.route("/")
+def adsf():
+    return "Go to /hiscore or /newscore or /bussit"
+
+@app.route("/np")
+def fdsa():
+    return render_template("nowplaying.html")
 
 @app.route("/bussit")
 def fuuboar():
