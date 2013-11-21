@@ -1,0 +1,42 @@
+<!doctype html>
+
+<head>
+    <title> EBIN SCHPATTS!  SCOAR! </title>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+
+{% block body %}
+<h1>{{game}}</h1>
+<table>
+ 
+  {% for score in scores %}
+    <tr class="{{ loop.cycle('odd', 'even') }}">
+        <td>{{score.nick}}</td>
+        <td>{{score.score}}</td>
+        <td>{{score.scoretype}}</td>
+        <td>{{score.date}}
+              
+    </tr>
+    {% endfor %}
+
+</table>
+
+<h1>{{game2}}</h1>
+
+<table>
+ 
+  {% for score in scores2 %}
+    <tr class="{{ loop.cycle('odd', 'even') }}">
+        <td>{{score.nick}}</td>
+        <td>{{score.score}}</td>
+        <td>{{score.scoretype}}</td>
+        <td>{{score.date}}
+              
+    </tr>
+    {% endfor %}
+
+</table>
+
+
+{% endblock %}
+
