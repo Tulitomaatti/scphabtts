@@ -12,7 +12,7 @@
   {% for score in scores %}
     <tr class="{{ loop.cycle('odd', 'even') }}">
         <td>{{score.nick}}</td>
-        <td>{{score.score}}</td>
+        <td style="text-align:right;">{{score.score}}</td>
         <td>{{score.scoretype}}</td>
         <td>{{score.date}}</td>
               
@@ -28,7 +28,7 @@
   {% for score in scores2 %}
     <tr class="{{ loop.cycle('odd', 'even') }}">
         <td>{{score.nick}}</td>
-        <td>{{score.score}}</td>
+        <td style="text-align:right;">{{score.score}}</td>
         <td>{{score.scoretype}}</td>
         <td>{{score.date}}</td>
               
