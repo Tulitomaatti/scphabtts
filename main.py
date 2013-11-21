@@ -41,7 +41,12 @@ def addscore():
         nick = form['nick']
         game = form['game']
         score = form['score']
-        scoretype = form['scoretype']
+
+        if form['newscoretype'] == "":
+            scoretype = form['scoretype']
+        else: 
+            scoretype = form['newscoretype']
+     #   droptype = form['droptype']
 
 
         new_score = Hiscore(nick, game, score, scoretype)
@@ -63,28 +68,48 @@ def addscore():
         pickle.dump(scores, f)
         f.close()
 
-        return "Score stored! Yay!\n "+ str(new_score)
+       # debugstring = str((nick, game, score, scoretype, droptype))
+
+        return "Score stored! Yay!\n "+ str(new_score) + "\n"#+ debugstring
 
     else:
+        scoretypes = []
 
-    #     return 'lol'
-        return render_template('addscore.html')
+        try: 
+            f = open("hiscores.hax", "r")
+        except IOError:
+            return render_template('addscore.html', scoretypes = scoretypes)
+
+        scores = pickle.load(f)
+
+        for score in scores:
+            scoretypes.append(score.scoretype)
+        scoretypes = list(set(scoretypes))
+
+        return render_template('addscore.html', scoretypes = scoretypes)
 
 @app.route("/hiscore")
 def hiscore():
-    f = open("hiscores.hax", "r")
+    try:
+        f = open("hiscores.hax", "r")
+    except IOError:
+        return "No hiscores found!"
+
     scores = pickle.load(f)
     games = []
     template_scores = []
     scores2 = []
+
 
     global MAGIC_NUMBER
 
     for score in scores:
         games.append(score.game)
 
+
     # remove duplicates / get 1 of each game
     games = list(set(games))
+
 
 
     template_game = games[MAGIC_NUMBER%len(games)]
@@ -117,7 +142,8 @@ def hiscore():
     # return string
 
     # Anna templaten hoitaa hommat: 
-    return render_template('hiscore.html', game = template_game, scores = template_scores, game2 = game2, scores2 = scores2)
+    return render_template('hiscore.html', game = template_game, scores = template_scores, 
+        game2 = game2, scores2 = scores2)
 
 if __name__ == "__main__":
     app.debug=True

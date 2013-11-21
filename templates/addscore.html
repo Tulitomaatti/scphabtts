@@ -13,24 +13,30 @@
 <FORM action="/newscore" method="POST"> 
 {% block body %}
 <table>
-<tr>
-<td>Nick:</td><td> {{input('nick')}}</td>
+<tr><td>Nick:</td><td> {{input('nick')}}</td></tr>
+<tr><td>Game:</td><td> {{input('game')}}</td></tr>
+
+<tr><td>Scoretype:</td>
+    <td> 
+    <select name="scoretype">
+        {% for type in scoretypes %}
+        <option value="{{type}}" {% if type == "points" %}selected="selected"{% endif %}>{{type}}</option>
+        {% endfor %}
+    </select>
+    </td>
+
+    <td>New scoretype? </td><td>{{input('newscoretype')}} </td>
+
 </tr>
-<tr>
-<td>Game:</td><td> {{input('game')}}</td>
-</tr>
-<tr>
-<td>Score:</td><td> {{input('score')}}</td>
-</tr>
-<tr>
-<td>Scoretype:</td><td> {{input('scoretype', 'points')}}</td>
-</tr>
+
+<tr><td>Score:</td><td> {{input('score')}}</td></tr>
+
+
 <tr>
    <td> <INPUT type="submit" value="Insert Score"> </td>
 </tr>
 
 
 </FORM>
-
 {% endblock %}
 
