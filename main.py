@@ -98,8 +98,16 @@ def hiscore():
             scores2.append(score)
 
 
+
     template_scores.sort()
-    template_scores.reverse()
+    scores2.sort()
+
+    if template_scores[0].scoretype == "points":
+        template_scores.reverse()
+
+    if scores2[0].scoretype == "points":
+        scores2.reverse()
+
 
     template_scores = template_scores[:SCORE_SHOW_NUMBER_MAGIC_VARIABLE]
     scores2 = scores2[:SCORE_SHOW_NUMBER_MAGIC_VARIABLE]
