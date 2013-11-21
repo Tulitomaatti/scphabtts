@@ -2,9 +2,6 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-from flask import redirect
-from flask import url_for 
-from werkzeug import secure_filename
 from hiscore import Hiscore
 
 import pickle
@@ -13,6 +10,8 @@ import urllib2
 from bs4 import BeautifulSoup
 
 MAGIC_URL = "http://www.omatlahdot.fi/omatlahdot/web?command=embedded&action=view&c=15&o=1&s=1220182"
+MAGIC_NUMBER = 1
+SCORE_SHOW_NUMBER_MAGIC_VARIABLE = 5
 
 app = Flask(__name__)
 
@@ -46,21 +45,21 @@ def addscore():
 
 
         new_score = Hiscore(nick, game, score, scoretype)
-        # Assuming that hiscores.txt doesn't exist or has a hiscore or an empty list pickled
+        # Assuming that hiscores.hax doesn't exist or has a hiscore or an empty list pickled
         scores = []
 
         try:
-            f = open("hiscores.txt", "rb")
+            f = open("hiscores.hax", "rb")
             scores = pickle.load(f)
         except Exception:
-            f = open("hiscores.txt", "wb")
+            f = open("hiscores.hax", "wb")
             pickle.dump(scores, f)
 
         f.close()
 
         scores.append(new_score)
 
-        f = open("hiscores.txt", "wb")
+        f = open("hiscores.hax", "wb")
         pickle.dump(scores, f)
         f.close()
 
@@ -73,19 +72,44 @@ def addscore():
 
 @app.route("/hiscore")
 def hiscore():
-    f = open("hiscores.txt", "r")
+    f = open("hiscores.hax", "r")
     scores = pickle.load(f)
+    games = []
+    template_scores = []
+    scores2 = []
 
-    string = ""
+    global MAGIC_NUMBER
 
     for score in scores:
-        string += str(score)
+        games.append(score.game)
+
+    # remove duplicates / get 1 of each game
+    games = list(set(games))
+
+
+    template_game = games[MAGIC_NUMBER%len(games)]
+    game2 = games[(MAGIC_NUMBER -1 )%len(games)]
+    MAGIC_NUMBER += 1
+
+    for score in scores:
+        if score.game == template_game:
+            template_scores.append(score)
+        if score.game == game2:
+            scores2.append(score)
+
+
+    template_scores.sort()
+    template_scores.reverse()
+
+    template_scores = template_scores[:SCORE_SHOW_NUMBER_MAGIC_VARIABLE]
+    scores2 = scores2[:SCORE_SHOW_NUMBER_MAGIC_VARIABLE]
+
 
     # Palauta html suoraan: 
-    return string
+    # return string
 
     # Anna templaten hoitaa hommat: 
-    # return render_template('template.html', templatenmuuttuja = muuttuja)
+    return render_template('hiscore.html', game = template_game, scores = template_scores, game2 = game2, scores2 = scores2)
 
 if __name__ == "__main__":
     app.debug=True
