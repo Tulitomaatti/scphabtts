@@ -9,7 +9,6 @@ import pickle
 import urllib2
 from bs4 import BeautifulSoup
 
-import mopidy
 
 MAGIC_URL = "http://www.omatlahdot.fi/omatlahdot/web?command=embedded&action=view&c=15&o=1&s=1220182"
 MAGIC_NUMBER = 1
