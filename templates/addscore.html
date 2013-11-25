@@ -7,25 +7,39 @@
 
 {% macro input(name, value='', type='text', size=20) -%}
     <input type="{{ type }}" name="{{ name }}" value="{{
-        value|e }}" maxlength="30" size="{{ size }}">
+        value|e }}" maxlength="40" size="{{ size }}">
 {%- endmacro %}
 
 <FORM action="/newscore" method="POST"> 
+
 {% block body %}
 <table>
-<tr><td>Nick:</td><td> {{input('nick')}}</td></tr>
-<tr><td>Game:</td><td> {{input('game')}}</td></tr>
 
-<tr><td>Scoretype:</td>
+<tr><td>Nick:</td>
     <td> 
-    <select name="scoretype">
-        {% for type in scoretypes %}
-        <option value="{{type}}" {% if type == "points" %}selected="selected"{% endif %}>{{type}}</option>
+    <select name="nick">
+        {% for nick in nicks %}
+        <option value="{{nick}}">{{nick}}</option>
         {% endfor %}
     </select>
     </td>
+    <td>New nick? </td><td>{{input('newnick')}}</td>
+</tr>
 
-    <td>New scoretype? </td><td>{{input('newscoretype')}} </td>
+<tr><tr><td>Game:</td>
+    <td> 
+    <select name="game">
+        {% for game in games %}
+        <option value="{{game}}">{{game}}</option>
+        {% endfor %}
+    </select>
+    </td>
+    <td>New game? </td><td>{{input('newgame')}}</td>
+</tr>
+
+<tr>
+
+    <td>New scoretype? </td><td>{{input('newscoretype')}}</td>
 
 </tr>
 

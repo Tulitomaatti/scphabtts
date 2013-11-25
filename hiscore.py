@@ -1,4 +1,5 @@
-# -*- conding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 from functools import total_ordering
 import datetime
 import time
@@ -65,6 +66,12 @@ class Hiscore():
         elif self.scoretype == "time":
             return self.score == other.score
 
+        elif self.scoretype == "shottia":
+            try:
+                return (int(self.score) == int(other.score))
+            except ValueError:
+                return self.score == other.score
+
         else:
             raise NotImplementedError(" EIOOLE IMPLEMENDOIDU.")
 
@@ -73,8 +80,10 @@ class Hiscore():
         
     def __gt__(self, other):
         if self.scoretype != other.scoretype:
+            # Jos scoretyppit ei matchaa, aakkostetaan scoretyypin mukaan.
             return self.scoretype > other.scoretype
 
+        # Scorekäsittely pisteille
         elif self.scoretype == "points": 
             try:
                 return (int(self.score) > int(other.score))
@@ -82,7 +91,10 @@ class Hiscore():
                 # HAX REVERSE ORDER
                 return self.score < other.score
 
+
+        # Scorekäsittely ajoille
         elif self.scoretype == "time":
+            self_time, other_time = (None, None)
             try:
                 self_time = time.strptime(self.score, HMS_FORMAT)
             except ValueError:
@@ -93,6 +105,10 @@ class Hiscore():
                         self_time = time.strptime(self.score, S_FORMAT)
                     except ValueError:
                         raise ValueError("saatanan saatana", self_time)
+
+            if self_time == None:
+                raise Exception("Perkele 1")
+
 
             try:
                 other_time = time.strptime(other.score, HMS_FORMAT)
@@ -105,7 +121,18 @@ class Hiscore():
                     except ValueError:
                         raise ValueError("saatanan saatana", other_time)
             # raise ValueError(self_time  other_time)
+            if other_time == None:
+                raise Exception("Perkele 2")
+
             return self_time > other_time
+
+        # shoteille
+        elif self.scoretype == "shottia": 
+            try:
+                return (int(self.score) < int(other.score))
+            except ValueError:
+                # HAX REVERSE ORDER
+                return self.score > other.score
 
         else:
             raise NotImplementedError(" EIOOLE IMPLEMENDOIDU.")

@@ -45,20 +45,24 @@ def fuuboar():
 def addscore():
     if request.method == 'POST':
 
+
         form = request.form
 
-        nick = form['nick']
-        game = form['game']
+        try:
+            nick = form['nick']
+        except KeyError:
+            nick = form['newnick']
+
+        try: 
+            game = form['game']
+        except KeyError:
+            game = form['newgame']
+            if form['newscoretype'] == "":
+                return "Täytä scoretype"
+
         score = form['score']
 
-        if form['newscoretype'] == "":
-            scoretype = form['scoretype']
-        else: 
-            scoretype = form['newscoretype']
-     #   droptype = form['droptype']
 
-
-        new_score = Hiscore(nick, game, score, scoretype)
         # Assuming that hiscores.hax doesn't exist or has a hiscore or an empty list pickled
         scores = []
 
@@ -69,7 +73,43 @@ def addscore():
             f = open("hiscores.hax", "wb")
             pickle.dump(scores, f)
 
+        
+
+
+        if form['newgame'] == "":
+            game = form['game']
+            # also set scoretype: 
+            for score_item in scores:
+                if score_item.game == game:
+                    scoretype = score_item.scoretype
+                    break
+
+        else: 
+            game = form['newgame']
+            scoretype = form['newscoretype']
+            #check if game already exists:
+
+            for score_item in scores:
+                if score_item.game == game:
+                    scoretype = score_item.scoretype
+                    break
+
+            if scoretype == '':
+                return "Saatanan saatana täytetään se scoretyyppi"
+
+
+        if form['newnick'] == "":
+            nick = form['nick']
+        else: 
+            nick = form['newnick']
+
         f.close()
+
+
+       #debug: return nick + game + score  + scoretype
+
+        new_score = Hiscore(nick, game, score, scoretype)
+
 
         scores.append(new_score)
 
@@ -83,6 +123,8 @@ def addscore():
 
     else:
         scoretypes = []
+        nicks = []
+        games = []
 
         try: 
             f = open("hiscores.hax", "r")
@@ -93,9 +135,14 @@ def addscore():
 
         for score in scores:
             scoretypes.append(score.scoretype)
-        scoretypes = list(set(scoretypes))
+            nicks.append(score.nick)
+            games.append(score.game)
 
-        return render_template('addscore.html', scoretypes = scoretypes)
+        scoretypes = list(set(scoretypes))
+        nicks = list(set(nicks))
+        games = list(set(games))
+
+        return render_template('addscore.html', scoretypes = scoretypes, nicks = nicks, games = games)
 
 @app.route("/hiscore")
 def hiscore():
