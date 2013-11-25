@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 
 MAGIC_URL = "http://www.omatlahdot.fi/omatlahdot/web?command=embedded&action=view&c=15&o=1&s=1220182"
 MAGIC_NUMBER = 1
-SCORE_SHOW_NUMBER_MAGIC_VARIABLE = 5
+SCORE_SHOW_NUMBER_MAGIC_VARIABLE = 8
 
 app = Flask(__name__)
 

@@ -1,8 +1,8 @@
 <!doctype html>
 
 <head>
-    <title> EBIN SCHPATTS!  SCOAR! </title>
-    <link rel="stylesheet" type="text/css" href="static/style.css">
+    <title>Hiscore board</title>
+ <link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/u/228097/DS/hiscore.css">	
 </head>
 
 {% block body %}
@@ -13,7 +13,7 @@
   {% for score in scores %}
     <tr class="{{ loop.cycle('odd', 'even') }}">
         <td>{{score.nick}}</td>
-        <td style="text-align:right;">{{score.score}}</td>
+        <td>{{score.score}}</td>
         <td>{{score.scoretype}}</td>
         <td>{{score.date}}</td>
               
@@ -21,16 +21,15 @@
     {% endfor %}
 
 </table>
-<hr>
 
-<h1>{{game2}}</h1>
+<!-- <h1>{{game2}}</h1>
 
 <table>
  
   {% for score in scores2 %}
     <tr class="{{ loop.cycle('odd', 'even') }}">
         <td>{{score.nick}}</td>
-        <td style="text-align:right;">{{score.score}}</td>
+        <td>{{score.score}}</td>
         <td>{{score.scoretype}}</td>
         <td>{{score.date}}</td>
               
@@ -38,8 +37,7 @@
     {% endfor %}
 
 </table>
-<hr>
-
+-->
 
 {% endblock %}
 
