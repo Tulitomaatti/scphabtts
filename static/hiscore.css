@@ -1,0 +1,31 @@
+body {
+font-size:50px;
+width: 100%;
+font-family: tahoma;
+margin:0 auto;
+}
+table {
+	border-collapse: collapse;
+    width: 100%;
+    margin:0;
+}
+.even td {
+    background-color: lightgray;
+    padding: 10px;
+	text-align: left;
+}
+.odd td {
+    background-color: white; 
+    padding: 10px;
+    text-align: left;
+}
+h1 {
+/*  font-family: tahoma;*/
+text-shadow:2px 2px #000000;
+margin:0;
+font-size:110px;
+color:white;
+/*background-color:#d94900; */
+background-color: gray;
+padding:20px;
+}
