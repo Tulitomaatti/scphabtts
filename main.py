@@ -20,7 +20,7 @@ app = Flask(__name__)
 def adsf():
     return "Go to /hiscore or /newscore or /bussit"
 
-@app.route("/np")
+@app.route("/np", methods=['POST', 'GET'])
 def fdsa():
     return render_template("nowplaying.html")
 
@@ -69,12 +69,13 @@ def addscore():
         try:
             f = open("hiscores.hax", "rb")
             scores = pickle.load(f)
-        except Exception:
-            f = open("hiscores.hax", "wb")
-            pickle.dump(scores, f)
-
-        
-
+        except IOError:
+            try:
+                f = open("hiscores.hax.backup", "rb")
+                scores = pickle.load(f)
+            except IOError:         
+                f = open("hiscores.hax", "wb")
+                pickle.dump(scores, f)
 
         if form['newgame'] == "":
             game = form['game']
