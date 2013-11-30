@@ -119,8 +119,10 @@ def addscore():
         f.close()
 
        # debugstring = str((nick, game, score, scoretype, droptype))
-
-        return "Score stored! Yay!\n "+ str(new_score) + "\n"#+ debugstring
+	PASKAHEADI='<meta http-equiv="refresh" content="6; url=/newscore" />'
+	PASKAHAKKI="<audio autoplay><source src='https://archive.org/download/GameOverYeah/GameOverYeah.ogg'></audio>"
+	
+        return PASKAHEADI+"Score stored! Yay!\n "+ str(new_score) + "\n"+PASKAHAKKI#+ debugstring 
 
     else:
         scoretypes = []
