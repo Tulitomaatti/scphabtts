@@ -202,6 +202,45 @@ def hiscore():
     return render_template('hiscore.html', game = template_game, scores = template_scores, 
         game2 = game2, scores2 = scores2)
 
+@app.route("/allscores")
+def allscores():
+    try:
+        f = open("hiscores.hax", "r")
+    except IOError:
+        return "No hiscores found!"
+
+    scores = pickle.load(f)
+    games = []
+    template_scores = []
+
+
+    for score in scores:
+        games.append(score.game)
+
+
+    # remove duplicates / get 1 of each game
+    games = list(set(games))
+    games.sort()
+
+
+    for game in games:
+        aux = []
+
+        for score in scores: 
+            if score.game == game:
+                aux.append(score)
+
+        aux.sort()
+        template_scores.append(aux)
+
+    # Template scores sisältää listan scoreja per peli. 
+
+
+
+    # Anna templaten hoitaa hommat: 
+    return render_template('allscores.html', games = games, scores = template_scores)
+
+
 if __name__ == "__main__":
     app.debug=True
     app.run(host='0.0.0.0')
