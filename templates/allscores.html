@@ -1,0 +1,49 @@
+<!doctype html>
+
+<head>
+    <title>All scores</title>
+ <link rel="stylesheet" type="text/css" href="static/hiscore.css">	
+</head>
+
+{% block body %}
+
+
+{% for game in games %}
+{% set counter = loop.index0 %}
+
+<h1>{{game}}</h1>
+
+<table>
+ 
+  {% for score in scores[counter] %}
+    <tr class="{{ loop.cycle('odd', 'even') }}">
+        <td>{{score.nick}}</td>
+        <td>{{score.score}}</td>
+        <td>{{score.scoretype}}</td>
+        <td>{{score.date}}</td>
+              
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endfor %}
+<!-- <h1>{{game2}}</h1>
+
+<table>
+ 
+  {% for score in scores2 %}
+    <tr class="{{ loop.cycle('odd', 'even') }}">
+        <td>{{score.nick}}</td>
+        <td>{{score.score}}</td>
+        <td>{{score.scoretype}}</td>
+        <td>{{score.date}}</td>
+              
+    </tr>
+    {% endfor %}
+
+</table>
+-->
+
+{% endblock %}
+
