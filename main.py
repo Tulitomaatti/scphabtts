@@ -75,7 +75,7 @@ def addscore():
             scores = pickle.load(f)
         except IOError:
             try:
-                f = open("hiscores.hax.backup", "rb")
+                f = open(HISCORE_FILE + ".backup", "rb")
                 scores = pickle.load(f)
             except IOError:         
                 f = open(HISCORES_FILE, "wb")
