@@ -235,7 +235,7 @@ def allscores():
                 aux.append(score)
 
         aux.sort()
-        if aux[0].scoretype == "points": #Purkkareverse pointseille
+        if aux[0].scoretype == "points": 
             aux.reverse()
 
         template_scores.append(aux)
