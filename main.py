@@ -186,6 +186,8 @@ def hiscore():
     template_scores.sort()
     scores2.sort()
 
+
+    # Purkka reversaus? 
     if template_scores[0].scoretype == "points":
         template_scores.reverse()
 
@@ -233,10 +235,12 @@ def allscores():
                 aux.append(score)
 
         aux.sort()
+        if aux[0].scoretype == "points": #Purkkareverse pointseille
+            aux.reverse()
+
         template_scores.append(aux)
 
     # Template scores sisältää listan scoreja per peli. 
-
 
 
     # Anna templaten hoitaa hommat: 
