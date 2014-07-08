@@ -17,6 +17,7 @@ MAGIC_NUMBER = 1
 SCORE_SHOW_NUMBER_MAGIC_VARIABLE = 8
 
 HISCORES_FILE = os.getenv("HOME") + "/scphabtts/hiscores.hax"
+HISCORE_FILE = HISCORES_FILE
 
 app = Flask(__name__)
 
