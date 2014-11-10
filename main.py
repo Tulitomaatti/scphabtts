@@ -152,6 +152,68 @@ def addscore():
 
         return render_template('addscore.html', scoretypes = scoretypes, nicks = nicks, games = games)
 
+
+@app.route("/delscore", methods=['POST', 'GET'])
+def hubulboga():
+
+    if request.method == 'POST':
+
+        form = request.form
+
+        try:
+            index_of_the_score_to_erase_forever = int(form['score_selection'])
+        except KeyError:
+            return "Could not extract score index from POSTed form!"
+
+        if (index_of_the_score_to_erase_forever < 0):
+            return "LOVE AND PEACE!!! NO DELETIONS!"
+
+
+        try:
+            f = open(HISCORES_FILE, "r")
+        except IOError:
+            return "No hiscores found!"
+
+        scores = pickle.load(f)
+        f.close()
+
+        deleted_score = scores.pop(index_of_the_score_to_erase_forever)
+
+
+        try:
+            f = open(HISCORES_FILE, "wb")
+        except IOError: 
+            return "AAAAA I CAN'T EVEN OPEN A FILE! "
+
+        try: 
+            pickle.dump(scores, f)
+        except IOError:
+            return "AASDLKdfjss couldn't write the file. lol."
+
+        f.close()
+
+        return "deleted the score: " + str(index_of_the_score_to_erase_forever) + ": " + str(deleted_score)
+
+
+
+    else:
+
+        try:
+            f = open(HISCORES_FILE, "rb")
+        except IOError:
+            return "No hiscores found!"
+
+        scores = pickle.load(f)
+        f.close()
+
+
+
+        # Anna templaten hoitaa hommat: 
+        return render_template('delscore.html', scores = scores)
+
+
+
+
 @app.route("/hiscore")
 def hiscore():
     try:
