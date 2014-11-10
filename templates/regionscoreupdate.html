@@ -1,0 +1,40 @@
+<!doctype html>
+
+<head>
+    <title>Control region members</title>
+</head>
+
+{% macro radio(score, counter) -%}
+    <input type="radio" name="score_selection" value="{{counter}}">
+    <b>{{counter}}</b>: {{score.date}} {{score.nick}} {{score.score}} {{score.scoretype}} {{score.game}} 
+    <br>
+{%- endmacro %}
+
+<form action="/regionscoreupdate" method="POST">
+
+
+{% block body %}
+<p>
+<input type="radio" name="action" value="update_scores" checked>Update/fetch scores from members.<br>
+<input type="radio" name="action" value="add_member">Add a new member to score region.<br> 
+</p>
+
+URL for new score region member: <input type="text" name="new_member" value=""><br>
+
+<p>
+Current score region members: <br><br>
+
+{% for member in members %}
+{{member}}<br> 
+
+{% endfor %}
+
+</p>
+
+<p>
+    <INPUT type="submit" value="ACTION!"> 
+</p>
+
+</form>
+{% endblock %}
+
