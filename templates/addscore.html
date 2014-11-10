@@ -4,7 +4,6 @@
     <title> EBIN SCHPATTS! </title>
 </head>
 
-
 {% macro input(name, value='', type='text', size=20) -%}
     <input type="{{ type }}" name="{{ name }}" value="{{
         value|e }}" maxlength="40" size="{{ size }}">
@@ -15,43 +14,41 @@
 {% block body %}
 <table>
 
-<tr><td>Nick:</td>
-    <td> 
-    <select name="nick">
-        {% for nick in nicks %}
-        <option value="{{nick}}">{{nick}}</option>
-        {% endfor %}
-    </select>
-    </td>
-    <td>New nick? </td><td>{{input('newnick')}}</td>
-<td>Lisää nick ainoastaan jos ei ole jo listassa!</td></tr>
-
-<tr><tr><td>Game:</td>
-    <td> 
-    <select name="game">
-        {% for game in games %}
-        <option value="{{game}}">{{game}}</option>
-        {% endfor %}
-    </select>
-    </td>
-    <td>New game? </td><td>{{input('newgame')}}</td>
-<td>Sama juttu</td>
+<tr>
+	<td>Nick:</td>
+    		<td> 
+    			<select name="nick">{% for nick in nicks %}
+        		<option value="{{nick}}">{{nick}}</option>
+        		{% endfor %}
+    			</select>
+    		</td>
+</tr>
+<tr>	
+	<td>New nick? </td><td>{{input('newnick')}}</td>
+	<td>add only if it's not already on the list!</td>
+</tr>
+<tr>
+	<td>Game:</td>
+    		<td> <select name="game">{% for game in games %}
+        	<option value="{{game}}">{{game}}</option>{% endfor %}
+    		</select>
+    		</td>
+</tr>
+<tr>
+	<td>New game? </td>
+	<td>{{input('newgame')}}</td>
+	<td>add only if it's not alrady in the list</td>
 </tr>
 
 <tr>
-
-    <td>New scoretype? </td><td>{{input('newscoretype')}}</td>
-<td>time / points (ainoastaan jos luot uuden entryn pelille)</td>
+	<td>New scoretype? </td><td>{{input('newscoretype')}}</td>
+	<td>time / points - add this only if you are creating a new game</td>
 </tr>
-
-<tr><td>Score:</td><td> {{input('score')}}</td><td>aika muodossa 00:00:00</td></tr>
-
-
 <tr>
-   <td> <INPUT type="submit" value="Insert Score"> </td>
+	<td>Score:</td><td> {{input('score')}}</td><td>time in format 00:00:00</td></tr>
+<tr>
+	<td> <INPUT type="submit" value="Insert Score"> </td>
 </tr>
-
-
 </FORM>
 {% endblock %}
-
+</table>

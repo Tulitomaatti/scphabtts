@@ -17,13 +17,15 @@ connect to it with ip:5000 or host.local:5000
 
 # How to actually use it
 to use Scpahbtts use following paths with the address 
-/hiscore or /allscores /delscores /regionscores /regionscoreupdate /np or /bussit
+/hiscore or /newscore /allscores /delscores /regionscores /regionscoreupdate /np or /bussit
 
 * hiscore will display one of the scores at a time and when you load it again
 it will show the next one which is usefull if you want to schedule html
 template to some kind of DS player such as screenly...
 
 * allscores will show all hiscores saved on the system, usefull if you want to quickly see them all.
+
+* newscore will allow you to add new scores
 
 * delscores will allow you to delete scores if somebody messed up
 

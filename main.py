@@ -31,7 +31,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def adsf():
-    return "Go to /hiscore or /allscores /delscores /regionscores /regionscoreupdate /np /allscoretransfer or /bussit"
+    return "Go to /hiscore /newscore /allscores /delscores /regionscores /regionscoreupdate /np /allscoretransfer or /bussit"
 
 @app.route("/np", methods=['POST', 'GET'])
 def fdsa():
