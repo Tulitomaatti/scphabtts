@@ -10,7 +10,7 @@ import urllib2
 from bs4 import BeautifulSoup
 
 import os
-
+import time
 
 MAGIC_URL = "http://www.omatlahdot.fi/omatlahdot/web?command=embedded&action=view&c=15&o=1&s=1220182"
 MAGIC_NUMBER = 1
@@ -22,6 +22,10 @@ REGION_FILE_SUFFIX = "/scphabtts/region.hax"
 REGION_MEMBERS_FILE = os.getenv("HOME") + REGION_FILE_SUFFIX
 
 REGION_HISCORE_FILE = os.getenv("HOME") + "/scphabtts/region_scores.hax"
+
+HMS_FORMAT = "%H:%M:%S"
+MS_FORMAT = "%M:%S"
+S_FORMAT = "%S"
 
 app = Flask(__name__)
 
@@ -192,35 +196,107 @@ def region_update():
             for member in region_members:
                 current_member_page = urllib2.urlopen(member)
 
+
+                #hoaly purkka perkelsson purkitettuna
                 for line in current_member_page:
                     score_temp = line.split('~')
-                    hiscore_temp = Hiscore(score_temp[0], score_temp[1], score_temp[2], score_temp[3])
-                    hiscore_temp.date = score_temp[4]
-                    hiscore_temp.date = hiscore_temp.date[:-3]
+
+                    try:
+                        if score_temp[3] == 'time':
+                            try:
+                                time_temp = time.strptime(score_temp[2], "%H h %M min %S sec")
+                            except ValueError:
+                                try:
+                                    time_temp = time.strptime(score_temp[2], "%M min %S sec")
+                                except ValueError:
+                                    try:
+                                        time_temp = time.strptime(score_temp[2], "%S sec")
+                                    except ValueError:
+                                        raise ValueError("saatanan saatana", score_temp[2])
+
+                            hour = time.struct_time((1900, 1, 1, 1, 0, 0, 0, 1, -1))
+                            minute = time.struct_time((1900, 1, 1, 0, 1, 0, 0, 1, -1))
+
+                            if time_temp >= hour:
+                                score_temp[2] = time.strftime(HMS_FORMAT, time_temp)
+                                if time_temp.tm_hour < 10:
+                                    score_temp[2] = score_temp[2][1:]
+                            elif time_temp >= minute:
+                                score_temp[2] = time.strftime(MS_FORMAT, time_temp)
+                                if time_temp.tm_min < 10:
+                                    score_temp[2] = score_temp[2][1:]
+                            else: 
+                                score_temp[2] = time.strftime(S_FORMAT, time_temp)
+                                if time_temp.tm_sec < 10:
+                                    score_temp[2] = score_temp[2][1:]
+
+                            score_temp[2] = score_temp[2].replace(' 0', ' ')  
 
 
-                    return line + "Sitten käsitelty: " + str(hiscore_temp) + "\n" + str(score_temp)
 
-                    new_scores.append(line)
+                        score_temp[4] = score_temp[4][:-2]
+                        hiscore_temp = Hiscore(score_temp[0], score_temp[1], score_temp[2], score_temp[3])
+                        hiscore_temp.date = score_temp[4]
+                       # hiscore_temp.date = hiscore_temp.date[:-2]
 
+
+                        
+
+                        new_scores.append(hiscore_temp)
+
+                  
+
+
+                    except IndexError:
+                        if score_temp != ['\n']:
+                            raise ValueError("I don't even know what error this error is error")
+
+                # at this point we have read scores from _one site_ to new_scores. 
+                # ... just loop until we have ALL THE SCORES MWAHAHAHA. 
+
+
+
+            # now we have all the scores.                    
 
             try:
                 f = open(REGION_HISCORE_FILE, 'rb')
+                scores = pickle.load(f)
+                f.close()
             except IOError:
-                return "coulnd't open region hiscore file :< saaad."
-
-            scores = pickle.load(f)
-            f.close()
+                scores = []
 
             for score in new_scores: 
                 scores.append(score)
+
+            try: 
+                f = open(HISCORE_FILE, 'rb')
+                scores_local = pickle.load(f)
+                f.close()
+            except IOError:
+                scores_local = []
+
+            for score in scores_local:
+                scores.append(score)
+
+            #remove duplicates: 
+            scores_unique = []
+            scores = sorted(scores)
+            last_score = Hiscore("", "")
+
+            for score in scores:
+                if score == last_score:
+                    continue
+                scores_unique.append(score)
+                last_score = score
+
+#            list(set(scores))
 
             try:
                 f = open(REGION_HISCORE_FILE, 'wb')
             except IOError:
                 return "couldn't open region hiscore file. uguu."
 
-            pickle.dump(scores, f)
+            pickle.dump(scores_unique, f)
             f.close()
 
 
