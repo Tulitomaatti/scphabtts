@@ -18,6 +18,10 @@ SCORE_SHOW_NUMBER_MAGIC_VARIABLE = 8
 
 HISCORES_FILE = os.getenv("HOME") + "/scphabtts/hiscores.hax"
 HISCORE_FILE = HISCORES_FILE
+REGION_FILE_SUFFIX = "/scphabtts/region.hax"
+REGION_MEMBERS_FILE = os.getenv("HOME") + REGION_FILE_SUFFIX
+
+REGION_HISCORE_FILE = os.getenv("HOME") + "/scphabtts/region_scores.hax"
 
 app = Flask(__name__)
 
@@ -151,6 +155,125 @@ def addscore():
         games = list(set(games))
 
         return render_template('addscore.html', scoretypes = scoretypes, nicks = nicks, games = games)
+
+
+@app.route("/regionscoreupdate", methods=['POST', 'GET'])
+def region_update():
+
+    region_members = []
+    try:
+        f = open(REGION_MEMBERS_FILE, "rb")
+        for line in f: 
+            region_members.append(line)
+    except IOError:
+        try:
+            f = open(REGION_MEMBERS_FILE, "wb")
+            f.close()
+            f = open(REGION_MEMBERS_FILE, "rb")
+        except IOError:
+            return "Couldn't read region members, and couldn't even create a new empty list. duh."
+    f.close()
+
+    if request.method == 'POST':
+        form = request.form
+
+        action = form['action']
+
+        if action == 'add_member':
+
+            f = open(REGION_MEMBERS_FILE, "ab")
+            f.write(form['new_member'] + "\n")
+            f.close()
+
+            return form['new_member'] + "added to score region."
+
+        elif action == 'update_scores':
+            new_scores = []
+            for member in region_members:
+                current_member_page = urllib2.urlopen(member, "", 1)
+
+                for line in current_member_page:
+                    new_scores.append(line)
+
+            return str(new_scores)
+
+
+
+
+
+        else:
+            return "Unknown action."
+
+    else:
+
+
+        region_members_string = ""
+        for member in region_members:
+            region_members_string += member + '\n'
+
+        return render_template('regionscoreupdate.html', members = region_members)
+
+
+
+
+@app.route("/regionscores")
+def region_scores():
+
+    try:
+        f = open(REGION_HISCORE_FILE, "r")
+    except IOError:
+        return "No hiscores found!"
+
+    scores = pickle.load(f)
+    games = []
+    template_scores = []
+
+    for score in scores:
+        games.append(score.game)
+
+
+    # remove duplicates / get 1 of each game
+    games = list(set(games))
+    games.sort()
+
+
+    for game in games:
+        aux = []
+
+        for score in scores: 
+            if score.game == game:
+                aux.append(score)
+
+        aux.sort()
+        if aux[0].scoretype == "points": 
+            aux.reverse()
+
+        template_scores.append(aux)
+
+    # Template scores sisältää listan scoreja per peli. 
+
+
+    # Anna templaten hoitaa hommat: 
+    return render_template('allscores.html', games = games, scores = template_scores)
+
+
+
+
+
+@app.route("/allscoretransfer")
+def score_transfer():
+        try:
+            f = open(HISCORES_FILE, "rb")
+        except IOError:
+            return "No hiscores found!"
+
+        scores = pickle.load(f)
+        f.close()
+
+
+
+        # Anna templaten hoitaa hommat: 
+        return render_template('allscoretransfer.html', scores = scores)
 
 
 @app.route("/delscore", methods=['POST', 'GET'])
