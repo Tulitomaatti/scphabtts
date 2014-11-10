@@ -1,0 +1,16 @@
+<!doctype html>
+
+<head>
+    <title>machine readable (maybe) score list</title>
+</head>
+
+{% block body %}
+
+
+{% for score in scores %}
+
+{{score.nick}};{{score.game}};{{score.score}};{{score.scoretype}};{{score.date}}<br>
+
+{% endfor %}
+{% endblock %}
+

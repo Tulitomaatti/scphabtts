@@ -1,0 +1,33 @@
+<!doctype html>
+
+<head>
+    <title>DELETE A SCORE... FOREVER!!!</title>
+</head>
+
+{% macro radio(score, counter) -%}
+    <input type="radio" name="score_selection" value="{{counter}}">
+    <b>{{counter}}</b>: {{score.date}} {{score.nick}} {{score.score}} {{score.scoretype}} {{score.game}} 
+    <br>
+{%- endmacro %}
+
+<form action="/delscore" method="POST">
+
+
+{% block body %}
+
+<input type="radio" name="score_selection" value="-1"><b>Don't delete any scores := </b><br>
+
+{% for score in scores %}
+{% set counter = loop.index0 %}
+
+{{ radio(score, counter) }}
+
+{% endfor %}
+
+<p>
+    <INPUT type="submit" value="DELETE THE SELECTED SCORE FOREVER"> 
+</p>
+
+</form>
+{% endblock %}
+
