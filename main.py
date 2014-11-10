@@ -190,7 +190,7 @@ def region_update():
         elif action == 'update_scores':
             new_scores = []
             for member in region_members:
-                current_member_page = urllib2.urlopen(member, "", 1)
+                current_member_page = urllib2.urlopen(member)
 
                 for line in current_member_page:
                     new_scores.append(line)
