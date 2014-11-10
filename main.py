@@ -193,13 +193,39 @@ def region_update():
                 current_member_page = urllib2.urlopen(member)
 
                 for line in current_member_page:
+                    score_temp = line.split('~')
+                    hiscore_temp = Hiscore(score_temp[0], score_temp[1], score_temp[2], score_temp[3])
+                    hiscore_temp.date = score_temp[4]
+                    hiscore_temp.date = hiscore_temp.date[:-3]
+
+
+                    return line + "Sitten käsitelty: " + str(hiscore_temp) + "\n" + str(score_temp)
+
                     new_scores.append(line)
 
-            return str(new_scores)
+
+            try:
+                f = open(REGION_HISCORE_FILE, 'rb')
+            except IOError:
+                return "coulnd't open region hiscore file :< saaad."
+
+            scores = pickle.load(f)
+            f.close()
+
+            for score in new_scores: 
+                scores.append(score)
+
+            try:
+                f = open(REGION_HISCORE_FILE, 'wb')
+            except IOError:
+                return "couldn't open region hiscore file. uguu."
+
+            pickle.dump(scores, f)
+            f.close()
 
 
 
-
+            return "yeaaahhh... ?"
 
         else:
             return "Unknown action."
