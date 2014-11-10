@@ -9,10 +9,15 @@ import pickle
 import urllib2
 from bs4 import BeautifulSoup
 
+import os
+
 
 MAGIC_URL = "http://www.omatlahdot.fi/omatlahdot/web?command=embedded&action=view&c=15&o=1&s=1220182"
 MAGIC_NUMBER = 1
 SCORE_SHOW_NUMBER_MAGIC_VARIABLE = 8
+
+HISCORES_FILE = os.getenv("HOME") + "/scphabtts/hiscores.hax"
+HISCORE_FILE = HISCORES_FILE
 
 app = Flask(__name__)
 
@@ -67,14 +72,14 @@ def addscore():
         scores = []
 
         try:
-            f = open("hiscores.hax", "rb")
+            f = open(HISCORES_FILE, "rb")
             scores = pickle.load(f)
         except IOError:
             try:
-                f = open("hiscores.hax.backup", "rb")
+                f = open(HISCORE_FILE + ".backup", "rb")
                 scores = pickle.load(f)
             except IOError:         
-                f = open("hiscores.hax", "wb")
+                f = open(HISCORES_FILE, "wb")
                 pickle.dump(scores, f)
 
         if form['newgame'] == "":
@@ -114,7 +119,7 @@ def addscore():
 
         scores.append(new_score)
 
-        f = open("hiscores.hax", "wb")
+        f = open(HISCORES_FILE, "wb")
         pickle.dump(scores, f)
         f.close()
 
@@ -130,7 +135,7 @@ def addscore():
         games = []
 
         try: 
-            f = open("hiscores.hax", "r")
+            f = open(HISCORES_FILE, "r")
         except IOError:
             return render_template('addscore.html', scoretypes = scoretypes)
 
@@ -150,7 +155,7 @@ def addscore():
 @app.route("/hiscore")
 def hiscore():
     try:
-        f = open("hiscores.hax", "r")
+        f = open(HISCORES_FILE, "r")
     except IOError:
         return "No hiscores found!"
 
@@ -209,7 +214,7 @@ def hiscore():
 @app.route("/allscores")
 def allscores():
     try:
-        f = open("hiscores.hax", "r")
+        f = open(HISCORES_FILE, "r")
     except IOError:
         return "No hiscores found!"
 
@@ -235,7 +240,7 @@ def allscores():
                 aux.append(score)
 
         aux.sort()
-        if aux[0].scoretype == "points": #Purkkareverse pointseille
+        if aux[0].scoretype == "points": 
             aux.reverse()
 
         template_scores.append(aux)

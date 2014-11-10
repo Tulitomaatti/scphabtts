@@ -72,8 +72,13 @@ class Hiscore():
             except ValueError:
                 return self.score == other.score
 
-        else:
-            raise NotImplementedError(" EIOOLE IMPLEMENDOIDU.")
+        else: # Muuten yritetään nyt järkätä ne numeroiden perusteella. 
+            try: 
+		return int(self.score) == int(other.score)
+            except ValueError:
+		return self.score == other.score
+
+#            raise NotImplementedError(" EIOOLE IMPLEMENDOIDU.")
 
     # def __ne__(self, other):
     #     return not self.__eq__
@@ -135,4 +140,9 @@ class Hiscore():
                 return self.score > other.score
 
         else:
-            raise NotImplementedError(" EIOOLE IMPLEMENDOIDU.")
+            try: 
+		return int(self.score) > int(other.score)
+            except ValueError:
+		return self.score > other.score
+
+#            raise NotImplementedError(" EIOOLE IMPLEMENDOIDU.")
