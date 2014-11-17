@@ -197,7 +197,7 @@ def region_update():
             new_scores = []
             region_index = 0 
             for member in region_members:
-                ++region_index 
+                region_index += 1
                 current_member_page = urllib2.urlopen(member)
 
                 # Get .hax file, save it, tadaa. 
@@ -221,6 +221,7 @@ def region_update():
                     return "mitä hlvettiä nty"
 
                 temp_scores = pickle.load(f);
+                f.close()
 
                 for score in temp_scores:
                     new_scores.append(score)
