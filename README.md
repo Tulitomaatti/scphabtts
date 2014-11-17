@@ -16,13 +16,13 @@ connect to it with ip:5000 or host.local:5000
 (if you want to use .local with linux you need to install avahi-daemon)
 
 #Requirements
-*you need to install flask
+* you need to install flask
 you can do it by ```sudo pip install flask```
 
-*and BeautifulSoup
+* and BeautifulSoup4
 ```pip install beautifulsoup4```
 
-if you are running osx you can get pip with
+* if you are running osx you can get pip with
 ```sudo easy_install pip```
 if it doesn't work you can try downloading installe script from
 their website: https://pip.pypa.io/en/latest/installing.html#install-or-upgrade-pip
