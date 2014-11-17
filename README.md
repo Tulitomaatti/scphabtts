@@ -7,13 +7,27 @@ Super cool python highscore and bus time table screen
 * Also, doesn't actually include the high score part.
 
 # how to use 
-python main.py
+```python main.py```
 its probably wise to run it inside a screen
 
 # How it works
 Scphabtts will run a python http server on port 5000 by default
 connect to it with ip:5000 or host.local:5000
 (if you want to use .local with linux you need to install avahi-daemon)
+
+#Requirements
+*you need to install flask
+you can do it by ```sudo pip install flask```
+
+*and BeautifulSoup
+```pip install beautifulsoup4```
+
+if you are running osx you can get pip with
+```sudo easy_install pip```
+if it doesn't work you can try downloading installe script from
+their website: https://pip.pypa.io/en/latest/installing.html#install-or-upgrade-pip
+
+you can also try install python with brew if you can't get those working
 
 # How to actually use it
 to use Scpahbtts use following paths with the address 
