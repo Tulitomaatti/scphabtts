@@ -74,6 +74,7 @@ also it will remove any duplicate scores.
 
 * the sh file:
 ``` #!/bin/sh ```
+
 ``` cp yourfile.hax /var/www/yourfile.hax ```
 
 * Hiscore dumper will upload your file to dropbox with dropbox_uploader.sh for sharing them
@@ -81,11 +82,13 @@ also it will remove any duplicate scores.
 
 the sh file:
 ``` #!/bin/sh ```
+
 ``` /home/user/Dropbox-Uploader/dropbox_uploader.sh upload /var/www/hiscores.hax /Public/nes/ ```
 
 # Run on boot
 
 * if you want to run the server on boot this might work on crontab -e
+
 ``` #@reboot /usr/bin/screen -fa -d -m -S scphabtts $HOME/scphabtts/main.py ```
 
 * there's also file named scphabtts which is a init.d script you can use
