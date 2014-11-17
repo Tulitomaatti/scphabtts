@@ -67,6 +67,20 @@ best of the best hiscore table. Add your additional hiscore locations to /region
 keep in mind that regionscore will combine same nicks so you can't have two people having the same nick
 also it will remove any duplicate scores.
 
+#crontabexamples
+* backup your hiscores to /var/www where you can also directly read them with other system if you want to
+```*/10 * * * * /home/user/copy-scphabtts```
+
+the sh file:
+```#!/bin/sh
+cp yourfile.hax /var/www/yourfile.hax```
+
+* Hiscore dumper will upload your file to dropbox with dropbox_uploader.sh for sharing them
+```*/10 * * * * /home/user/hiscores-merge.sh```
+the sh file:
+```#!/bin/sh
+/home/user/Dropbox-Uploader/dropbox_uploader.sh upload /var/www/hiscores.hax /Public/nes/```
+
 #Run on boot
 
 if you want to run the server on boot this might work on crontab -e
