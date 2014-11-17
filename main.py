@@ -16,12 +16,14 @@ MAGIC_URL = "http://www.omatlahdot.fi/omatlahdot/web?command=embedded&action=vie
 MAGIC_NUMBER = 1
 SCORE_SHOW_NUMBER_MAGIC_VARIABLE = 8
 
-HISCORES_FILE = os.getenv("HOME") + "/scphabtts/hiscores.hax"
-HISCORE_FILE = HISCORES_FILE
-REGION_FILE_SUFFIX = "/scphabtts/region.hax"
-REGION_MEMBERS_FILE = os.getenv("HOME") + REGION_FILE_SUFFIX
 
-REGION_HISCORE_FILE = os.getenv("HOME") + "/scphabtts/region_scores.hax"
+SCPHABTTS_DATA_DIR = os.getenv("HOME") + "/scphabtts/"
+
+HISCORES_FILE = SCPHABTTS_DATA_DIR + "hiscores.hax"
+REGION_MEMBERS_FILE = SCPHABTTS_DATA_DIR + "region.hax"
+REGION_HISCORE_FILE = SCPHABTTS_DATA_DIR + "region_scores.hax"
+
+HISCORE_FILE = HISCORES_FILE
 
 HMS_FORMAT = "%H:%M:%S"
 MS_FORMAT = "%M:%S"
@@ -193,63 +195,92 @@ def region_update():
 
         elif action == 'update_scores':
             new_scores = []
+            region_index = 0 
             for member in region_members:
+                ++region_index 
                 current_member_page = urllib2.urlopen(member)
 
+                # Get .hax file, save it, tadaa. 
+                score_file_name = member.split('/')[-1]
+                # score_data = current_member_page.read()
 
-                #hoaly purkka perkelsson purkitettuna
-                for line in current_member_page:
-                    score_temp = line.split('~')
+                indexed_filename = SCPHABTTS_DATA_DIR + str(region_index) + ".region_scores.hax"
 
-                    try:
-                        if score_temp[3] == 'time':
-                            try:
-                                time_temp = time.strptime(score_temp[2], "%H h %M min %S sec")
-                            except ValueError:
-                                try:
-                                    time_temp = time.strptime(score_temp[2], "%M min %S sec")
-                                except ValueError:
-                                    try:
-                                        time_temp = time.strptime(score_temp[2], "%S sec")
-                                    except ValueError:
-                                        raise ValueError("saatanan saatana", score_temp[2])
+                try: 
+                    f = open( indexed_filename, 'wb')
+                except IOError:
+                    return """ ("ei osattu avata filua " +region_index "niinku"): """ + indexed_filename
 
-                            hour = time.struct_time((1900, 1, 1, 1, 0, 0, 0, 1, -1))
-                            minute = time.struct_time((1900, 1, 1, 0, 1, 0, 0, 1, -1))
+                f.write(current_member_page.read())
+                f.close()
 
-                            if time_temp >= hour:
-                                score_temp[2] = time.strftime(HMS_FORMAT, time_temp)
-                                if time_temp.tm_hour < 10:
-                                    score_temp[2] = score_temp[2][1:]
-                            elif time_temp >= minute:
-                                score_temp[2] = time.strftime(MS_FORMAT, time_temp)
-                                if time_temp.tm_min < 10:
-                                    score_temp[2] = score_temp[2][1:]
-                            else: 
-                                score_temp[2] = time.strftime(S_FORMAT, time_temp)
-                                if time_temp.tm_sec < 10:
-                                    score_temp[2] = score_temp[2][1:]
 
-                            score_temp[2] = score_temp[2].replace(' 0', ' ')  
+                try:
+                    f = open( indexed_filename, "rb")
+                except IOError:
+                    return "mitä hlvettiä nty"
+
+                temp_scores = pickle.load(f);
+
+                for score in temp_scores:
+                    new_scores.append(score)
 
 
 
-                        score_temp[4] = score_temp[4][:-2]
-                        hiscore_temp = Hiscore(score_temp[0], score_temp[1], score_temp[2], score_temp[3])
-                        hiscore_temp.date = score_temp[4]
-                       # hiscore_temp.date = hiscore_temp.date[:-2]
+                                    # tämä koodi oli aivan saatanan hyödyllinen :________________________________D
+                                # #hoaly purkka perkelsson purkitettuna
+                                # for line in current_member_page:
+                                #     score_temp = line.split('~')
+
+                                #     try:
+                                #         if score_temp[3] == 'time':
+                                #             try:
+                                #                 time_temp = time.strptime(score_temp[2], "%H h %M min %S sec")
+                                #             except ValueError:
+                                #                 try:
+                                #                     time_temp = time.strptime(score_temp[2], "%M min %S sec")
+                                #                 except ValueError:
+                                #                     try:
+                                #                         time_temp = time.strptime(score_temp[2], "%S sec")
+                                #                     except ValueError:
+                                #                         raise ValueError("saatanan saatana", score_temp[2])
+
+                                #             hour = time.struct_time((1900, 1, 1, 1, 0, 0, 0, 1, -1))
+                                #             minute = time.struct_time((1900, 1, 1, 0, 1, 0, 0, 1, -1))
+
+                                #             if time_temp >= hour:
+                                #                 score_temp[2] = time.strftime(HMS_FORMAT, time_temp)
+                                #                 if time_temp.tm_hour < 10:
+                                #                     score_temp[2] = score_temp[2][1:]
+                                #             elif time_temp >= minute:
+                                #                 score_temp[2] = time.strftime(MS_FORMAT, time_temp)
+                                #                 if time_temp.tm_min < 10:
+                                #                     score_temp[2] = score_temp[2][1:]
+                                #             else: 
+                                #                 score_temp[2] = time.strftime(S_FORMAT, time_temp)
+                                #                 if time_temp.tm_sec < 10:
+                                #                     score_temp[2] = score_temp[2][1:]
+
+                                #             score_temp[2] = score_temp[2].replace(' 0', ' ')  
 
 
-                        
 
-                        new_scores.append(hiscore_temp)
+                                #         score_temp[4] = score_temp[4][:-2]
+                                #         hiscore_temp = Hiscore(score_temp[0], score_temp[1], score_temp[2], score_temp[3])
+                                #         hiscore_temp.date = score_temp[4]
+                                #        # hiscore_temp.date = hiscore_temp.date[:-2]
 
-                  
+
+                                        
+
+                                #         new_scores.append(hiscore_temp)
+
+                                  
 
 
-                    except IndexError:
-                        if score_temp != ['\n']:
-                            raise ValueError("I don't even know what error this error is error")
+                                #     except IndexError:
+                                #         if score_temp != ['\n']:
+                                #             raise ValueError("I don't even know what error this error is error")
 
                 # at this point we have read scores from _one site_ to new_scores. 
                 # ... just loop until we have ALL THE SCORES MWAHAHAHA. 
